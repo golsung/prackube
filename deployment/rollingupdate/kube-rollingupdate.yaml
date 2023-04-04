@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-ru
+  labels:
+    app: kube-ru
+spec:
+  replicas: 5
+  # minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    # rollingUpdate:
+    #   maxSurge: 1
+    #   maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: kube-ru
+  template:
+    metadata:
+      labels:
+        app: kube-ru
+    spec:
+      containers:
+      - name: calculator
+        imagePullPolicy: Always
+        image: insang/calculator-m1:v0
+        ports:
+        - containerPort: 8080
+        readinessProbe: # 요청을 처리할 준비가 되었는지 체크
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10

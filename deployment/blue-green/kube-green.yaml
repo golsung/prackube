@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubedemo-deployment-green
+  labels:
+    app: kubedemo
+spec:
+  replicas: 2
+  # minReadySeconds: 5
+  # strategy:
+  #   type: RollingUpdate
+  #   rollingUpdate:
+  #     maxSurge: 1
+  #     maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: kubedemo
+      version: green
+  template:
+    metadata:
+      labels:
+        app: kubedemo
+        version: green
+    spec:
+      containers:
+      - name: kubedemo
+        imagePullPolicy: Always
+        image: insang/calculator-m1:v1
+        ports:
+        - containerPort: 8080
+        readinessProbe: # 요청을 처리할 준비가 되었는지 체크
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-canary
+  labels:
+    app: kube-canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-canary
+  template:
+    metadata:
+      labels:
+        app: kube-canary
+    spec:
+      containers:
+      - name: kube-canary
+        imagePullPolicy: Always
+        image: insang/calculator-m1:v1
+        ports:
+        - containerPort: 8080
+        readinessProbe: # 요청을 처리할 준비가 되었는지 체크
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10

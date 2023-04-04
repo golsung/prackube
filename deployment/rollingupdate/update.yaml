@@ -1,0 +1,6 @@
+spec:
+  template:
+    spec:
+      containers:
+        - name: calculator
+          image: insang/calculator-m1:v1

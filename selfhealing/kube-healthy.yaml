@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-healthy
+spec:
+  containers:
+  - name: kube-healthy
+    # imagePullPolicy: Always
+    image: insang/healthy-m1:v0
+    ports:
+    - containerPort: 8080
+    livenessProbe: # 5초마다 살아있는지 체크
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
+      initialDelaySeconds: 5
+      periodSeconds: 5
